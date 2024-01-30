@@ -4,7 +4,7 @@ import { FaTrash, FaRegEdit } from "react-icons/fa";
 import { deleteComment } from "../../features/Quotes/QuotesSlice";
 import { useDispatch } from "react-redux";
 import { useState } from "react";
-import EditComment from "./editComment";
+import EditComment from "./EditComment";
 
 const ShowComments = ({ quoteid, id, text }) => {
   const [isEdit, setIsEdit] = useState(false);
