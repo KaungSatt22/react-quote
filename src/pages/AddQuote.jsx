@@ -23,7 +23,7 @@ const AddQuote = () => {
   };
   const submitHandler = (e) => {
     e.preventDefault();
-    dispatch(addToQuote({ author, quote }));
+    dispatch(addToQuote(author, quote));
     navigate("/allquotes");
   };
   return (

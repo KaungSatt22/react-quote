@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { fetchData } from "../api/api";
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
+
 const Home = () => {
   const [data, setData] = useState("");
   useEffect(() => {
@@ -12,6 +13,7 @@ const Home = () => {
     let interval = setInterval(() => {
       fetchApi();
     }, 5000);
+
     return () => clearInterval(interval);
   }, []);
   return (
@@ -21,7 +23,7 @@ const Home = () => {
           Welcome To Our Home Page
         </h2>
         <h2 className="text-xl my-20 text-center">
-          You Can Find A Lot Of Quotes And You Can Add Quote
+          You can find a lot of Quotes and you can add Quote
         </h2>
         <div className="mb-10 space-x-5">
           <NavLink

@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 const initialState = {
   quotes: [
     {
-      id: 1,
+      id: uuidv4(),
       author: "test",
       quote: "test",
       comments: [
@@ -24,27 +24,31 @@ const QuoteSlice = createSlice({
   name: "quotes",
   initialState,
   reducers: {
-    addToQuote(state, { payload }) {
-      state.quotes.push({
-        id: uuidv4(),
-        author: payload.author,
-        quote: payload.quote,
-        comments: [],
-        reactions: {
-          "👍🏼": 0,
-          "😍": 0,
-          "😡": 0,
-          "👎🏻": 0,
-        },
-      });
+    addToQuote: {
+      prepare(author, quote) {
+        return {
+          payload: {
+            id: uuidv4(),
+            author,
+            quote,
+            comments: [],
+            reactions: {
+              "👍🏼": 0,
+              "😍": 0,
+              "😡": 0,
+              "👎🏻": 0,
+            },
+          },
+        };
+      },
+      reducer(state, { payload }) {
+        state.quotes.push(payload);
+      },
     },
     removeToQuote(state, { payload }) {
-      let findIdx = state.quotes.findIndex(
-        (quote) => quote.id === payload.postid
+      state.quotes = state.quotes.filter(
+        (quote) => quote.id !== payload.postid
       );
-      if (findIdx !== -1) {
-        state.quotes.splice(findIdx, 1);
-      }
     },
     addComment(state, { payload }) {
       let findQuote = state.quotes.find((quote) => quote.id === payload.postid);
@@ -52,15 +56,22 @@ const QuoteSlice = createSlice({
         findQuote.comments.push({ id: uuidv4(), text: payload.text });
       }
     },
+    editComment(state, { payload }) {
+      let findQuote = state.quotes.find((quote) => quote.id === payload.postid);
+      if (findQuote) {
+        findQuote.comments = findQuote.comments.map((comment) =>
+          comment.id === payload.commentid
+            ? { ...comment, text: payload.text }
+            : comment
+        );
+      }
+    },
     deleteComment(state, { payload }) {
       let findQuote = state.quotes.find((quote) => quote.id === payload.postid);
       if (findQuote) {
-        let commentIdx = findQuote.comments.findIndex(
-          (comment) => comment.id === payload.commentid
+        findQuote.comments = findQuote.comments.filter(
+          (comment) => comment.id !== payload.commentid
         );
-        if (commentIdx !== -1) {
-          findQuote.comments.splice(commentIdx, 1);
-        }
       }
     },
     addReactions(state, { payload }) {
@@ -80,7 +91,9 @@ export const {
   deleteComment,
   addComment,
   addReactions,
+  editComment,
 } = QuoteSlice.actions;
+
 export const quotes = (state) => state.quotes.quotes;
 export const reactionCount = (state, postid, emoji) => {
   let findQuote = state.quotes.quotes.find((quote) => quote.id === postid);
@@ -88,4 +101,4 @@ export const reactionCount = (state, postid, emoji) => {
     return findQuote[emoji];
   }
 };
-export default QuoteSlice.reducer;
+export default QuoteSlice;

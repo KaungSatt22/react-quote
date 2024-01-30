@@ -5,6 +5,7 @@ import { addComment, removeToQuote } from "./QuotesSlice";
 import { useDispatch } from "react-redux";
 import Reactions from "../../componets/reactions/Reactions";
 import { FaTrash } from "react-icons/fa";
+
 const Quote = ({ ...quote }) => {
   const [isShowCom, setIsShowCom] = useState(false);
   const [isAddCom, setIsAddCom] = useState(false);
@@ -32,15 +33,15 @@ const Quote = ({ ...quote }) => {
         <div className="flex items-center space-x-5">
           <button
             onClick={() => setIsShowCom(!isShowCom)}
-            className="bg-blue-500 p-2 text-xl rounded-lg text-white"
+            className="bg-blue-500 py-2 px-5 text-xl rounded-lg text-white"
           >
-            Show Comments
+            {isShowCom ? "Close" : "Show"} Comments
           </button>
           <button
             onClick={() => setIsAddCom(!isAddCom)}
-            className="bg-blue-500 p-2 text-xl rounded-lg text-white"
+            className="bg-blue-500 py-2 px-5 text-xl rounded-lg text-white"
           >
-            Add Comments
+            {isAddCom ? "Close" : "Add"} Comments
           </button>
           <div className=" inline-block">
             <FaTrash
